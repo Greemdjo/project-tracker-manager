@@ -46,22 +46,23 @@ export default function Projects() {
     loadProjects()
   }, [])
 
-  async function handleCreate(e: React.FormEvent) {
-    e.preventDefault()
-    setSaving(true)
-    setError('')
-
-    try {
-      await createProject(form)
-      setForm(initialForm)
-      setShowForm(false)
-      await loadProjects()
-    } catch {
-      setError('Не удалось создать проект. Проверь данные.')
-    } finally {
-      setSaving(false)
-    }
+ async function handleCreate(e: React.FormEvent) {
+  e.preventDefault()
+  setSaving(true)
+  setError('')
+  try {
+    await createProject(form)
+    // ✅ Очищаем форму только после успешного ответа от API
+    setForm(initialForm)
+    setShowForm(false)
+    await loadProjects()
+  } catch {
+    setError('Не удалось создать проект. Проверь данные.')
+    // При ошибке форма НЕ очищается, чтобы пользователь мог исправить данные
+  } finally {
+    setSaving(false)
   }
+}
 
   async function handleDelete(id: number) {
     if (!window.confirm('Удалить этот проект?')) return
@@ -146,9 +147,7 @@ export default function Projects() {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  deadline: e.target.value
-                    ? new Date(e.target.value).toISOString()
-                    : null,
+                  deadline: e.target.value || null,
                 })
               }
               className="w-full border border-slate-300 rounded-lg p-3 mt-1"
