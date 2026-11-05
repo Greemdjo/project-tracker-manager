@@ -182,86 +182,116 @@ export default function ProjectDetail() {
         </p>
       )}
 
-      {showForm && (
+            {showForm && (
         <form
           onSubmit={handleCreateTask}
           className="bg-white rounded-xl border p-6 mb-6 space-y-4"
         >
-          <input
-            required
-            placeholder="Название задачи"
-            value={form.title}
-            onChange={(e) =>
-              setForm({ ...form, title: e.target.value })
-            }
-            className="w-full border rounded-lg p-3"
-          />
-
-          <select
-            required
-            value={form.ground_id || ''}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                ground_id: Number(e.target.value),
-              })
-            }
-            className="w-full border rounded-lg p-3"
-          >
-            <option value="">Выбери основание</option>
-
-            {grounds.map((ground) => (
-              <option key={ground.id} value={ground.id}>
-                {ground.title}
-              </option>
-            ))}
-          </select>
-
-          <textarea
-            placeholder="Описание задачи"
-            value={form.description}
-            onChange={(e) =>
-              setForm({ ...form, description: e.target.value })
-            }
-            className="w-full border rounded-lg p-3"
-          />
-
-          <div className="grid md:grid-cols-2 gap-4">
+          {/* 1. Название */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Название задачи <span className="text-red-500">*</span>
+            </label>
             <input
-              type="number"
-              min="0"
-              placeholder="Планируемые часы"
-              value={form.planned_effort}
+              required
+              placeholder="Например: Сделать авторизацию"
+              value={form.title}
               onChange={(e) =>
-                setForm({
-                  ...form,
-                  planned_effort: Number(e.target.value),
-                })
+                setForm({ ...form, title: e.target.value })
               }
-              className="border rounded-lg p-3"
+              className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+          </div>
 
+          {/* 2. Основание */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Основание <span className="text-red-500">*</span>
+            </label>
             <select
-              value={form.status}
+              required
+              value={form.ground_id || ''}
               onChange={(e) =>
                 setForm({
                   ...form,
-                  status: e.target.value as TaskCreate['status'],
+                  ground_id: Number(e.target.value),
                 })
               }
-              className="border rounded-lg p-3"
+              className="w-full border rounded-lg p-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="new">Новая</option>
-              <option value="active">Активная</option>
-              <option value="completed">Завершена</option>
-              <option value="frozen">Заморожена</option>
-              <option value="cancelled">Отменена</option>
+              <option value="" disabled>Выбери основание</option>
+              {grounds.map((ground) => (
+                <option key={ground.id} value={ground.id}>
+                  {ground.title}
+                </option>
+              ))}
             </select>
           </div>
 
-          <button className="bg-blue-600 text-white px-5 py-3 rounded-lg">
-            Создать задачу
-          </button>
+          {/* 3. Описание */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Описание задачи
+            </label>
+            <textarea
+              placeholder="Подробности выполнения задачи..."
+              value={form.description}
+              onChange={(e) =>
+                setForm({ ...form, description: e.target.value })
+              }
+              className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none h-24"
+            />
+          </div>
+
+          {/* 4. Часы и Статус */}
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Планируемые часы
+              </label>
+              <input
+                type="number"
+                min="0"
+                placeholder="0"
+                value={form.planned_effort}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    planned_effort: Number(e.target.value),
+                  })
+                }
+                className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Статус задачи
+              </label>
+              <select
+                value={form.status}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    status: e.target.value as TaskCreate['status'],
+                  })
+                }
+                className="w-full border rounded-lg p-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="new">Новая</option>
+                <option value="active">Активная</option>
+                <option value="completed">Завершена</option>
+                <option value="frozen">Заморожена</option>
+                <option value="cancelled">Отменена</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="pt-2">
+            <button className="bg-blue-600 text-white px-5 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+              Создать задачу
+            </button>
+          </div>
         </form>
       )}
 
