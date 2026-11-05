@@ -48,13 +48,23 @@ export default function Projects() {
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault()
+
     setSaving(true)
     setError('')
 
     try {
-      await createProject(form)
+      const projectData: ProjectCreate = {
+        ...form,
+        deadline: form.deadline
+          ? new Date(form.deadline).toISOString()
+          : null,
+      }
+
+      await createProject(projectData)
+
       setForm(initialForm)
       setShowForm(false)
+
       await loadProjects()
     } catch {
       setError('Не удалось создать проект. Проверь данные.')
@@ -146,9 +156,7 @@ export default function Projects() {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  deadline: e.target.value
-                    ? new Date(e.target.value).toISOString()
-                    : null,
+                  deadline: e.target.value || null,
                 })
               }
               className="w-full border border-slate-300 rounded-lg p-3 mt-1"
