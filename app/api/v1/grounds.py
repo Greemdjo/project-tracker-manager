@@ -16,16 +16,15 @@ router = APIRouter()
     summary="Создать новое основание"
 )
 def create_ground(ground: GroundCreate, db: Session = Depends(get_db)):
-    '''
-    Создает новое основание для проекта.
-        - **project_id**: ID - существующего проекта
-        - **title**: Название основания
-        - **ground_type**: Тип основания
-        - **ground_status**:
+    # ✅ Проверяем, нет ли уже основания у этого проекта (связь 1:1)
+    existing_ground = crud_ground.get_ground_by_project(db, ground.project_id)
+    if existing_ground:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail="У этого проекта уже есть основание (связь 1:1)"
+        )
         
-    '''
     return crud_ground.create_ground(db, ground)
-
 # 2. Получение списка всех оснований
 @router.get(
     "/",
