@@ -141,7 +141,7 @@ export default function Projects() {
           <label className="block text-sm text-slate-600">
             Дедлайн
             <input
-              type="datetime-local"
+              type="date"
               value={form.deadline ?? ''}
               onChange={(e) =>
                 setForm({

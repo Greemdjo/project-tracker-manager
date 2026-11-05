@@ -226,7 +226,7 @@ export default function Reports() {
               </label>
 
               <input
-                type="datetime-local"
+                type="date"
                 required
                 value={new Date(form.reportDate)
                   .toISOString()
