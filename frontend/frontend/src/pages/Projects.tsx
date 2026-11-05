@@ -53,11 +53,9 @@ export default function Projects() {
     setError('')
 
     try {
-      const projectData: ProjectCreate = {
+      const projectData = {
         ...form,
-        deadline: form.deadline
-          ? new Date(form.deadline).toISOString()
-          : null,
+        deadline: form.deadline || null,
       }
 
       await createProject(projectData)
@@ -151,7 +149,7 @@ export default function Projects() {
           <label className="block text-sm text-slate-600">
             Дедлайн
             <input
-              type="datetime-local"
+              type="date"
               value={form.deadline ?? ''}
               onChange={(e) =>
                 setForm({
