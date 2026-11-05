@@ -37,7 +37,7 @@ def read_grounds(
     limit: int = 100,
     db: Session = Depends(get_db)
 ):
-    return crud_ground.get_ground(db, skip=skip, limit=limit)
+    return crud_ground.get_grounds(db, skip=skip, limit=limit)
 
 # 3. Получение одного основания
 @router.get(
