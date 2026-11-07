@@ -79,13 +79,25 @@ export default function ProjectDetail() {
     }
   }, [projectId])
 
+  const currentGround = grounds.find(g => g.project_id === Number(projectId));
+
   async function handleCreateTask(e: React.FormEvent) {
     e.preventDefault()
+    
+    // Защита: если основания нет, задачу создать нельзя
+    if (!currentGround) return; 
 
     try {
-      await createTask(form)
+      
+      const taskData = {
+        ...form,
+        ground_id: currentGround.id, 
+      }
+
+      await createTask(taskData)
       setShowForm(false)
 
+      // Очищаем форму (ground_id можно сбросить в 0, он все равно перезапишется)
       setForm({
         title: '',
         ground_id: 0,
@@ -101,7 +113,7 @@ export default function ProjectDetail() {
       setError('Не удалось создать задачу.')
     }
   }
-
+   
   if (loading) return <Loading />
 
   if (error && !project) {
